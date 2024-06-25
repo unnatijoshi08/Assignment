@@ -1,0 +1,79 @@
+const navigate = useNavigate();
+  const [showDropdown, setShowDropdown] = useState(null);
+
+  const handleEdit = (id) => {
+    navigate(`/edit/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    navigate(`/delete/${id}`);
+  };
+
+  const toggleDropdown = (id) => {
+    setShowDropdown(showDropdown === id ? null : id);
+  };
+
+  return (
+    <div className="container mx-auto py-8">
+      <table className="min-w-full bg-white">
+        <thead className="bg-gray-200">
+          <tr>
+            <th className="py-2 px-4 border-b">ID</th>
+            <th className="py-2 px-4 border-b">Name</th>
+            <th className="py-2 px-4 border-b">Email</th>
+            <th className="py-2 px-4 border-b">Phone</th>
+            <th className="py-2 px-4 border-b">Last Login</th>
+            <th className="py-2 px-4 border-b">Role</th>
+            <th className="py-2 px-4 border-b">Status</th>
+            <th className="py-2 px-4 border-b">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {initialUsers.map((user) => (
+            <tr key={user.id}>
+              <td className="py-2 px-4 border-b">{user.id}</td>
+              <td className="py-2 px-4 border-b">
+                <img
+                className="w-[40px] h-[40px]  "
+                src={user.photo}
+                alt=""
+              />
+            <p className = "ml-4"> {user.firstName} <span> {" "}</span> {user.lastName}</p>
+
+              </td>
+              <td className="py-2 px-4 border-b">{user.email}</td>
+              <td className="py-2 px-4 border-b">{user.phone}</td>
+              <td className="py-2 px-4 border-b">{user.lastLogin}</td>
+              <td className="py-2 px-4 border-b">{user.role}</td>
+              <td className="py-2 px-4 border-b">{user.status}</td>
+              <td className="py-2 px-4 border-b relative">
+                <button
+                  onClick={() => toggleDropdown(user.id)}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                >
+                  Action
+                </button>
+                {showDropdown === user.id && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg">
+                    <button
+                      onClick={() => handleEdit(user.id)}
+                      className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(user.id)}
+                      className="block px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};

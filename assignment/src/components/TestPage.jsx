@@ -1,22 +1,62 @@
-import React from "react";
-import UserWidgetComponent from "./UserWidgetComponent";
+import "./tailwind.css";
+import React, { useState } from "react";
+import UserListComponent from "./UserListComponent";
 
-function TestPage() {
-  const user = {
-    photo:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8E25p14BClbGa-hcOMbll9zxxbErPmuSyXw&s",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    status: true,
-  };
+import EditUserComponent from "./EditUserComponent";
+import DeleteUserComponent from "./DeleteUserComponent";
+import Sidebar from "./Sidebar";
+import { initialUsers } from "../store";
+import Header from "./Header";
+import ListViewIcon from "../assets/ListViewIcon";
+import GridViewIcon from "../assets/GridViewIcon";
+import UserGridView from "./UserGridView"
+import { useNavigate } from "react-router-dom";
+import AddUserComponent from "./AddUserComponent";
+
+const TestPage = ({ addUser, users, setIsGridView, isGridView }) => {
+ 
+  const navigate= useNavigate();
 
   return (
-    <div>
-      <h1>Test Page</h1>
-      <UserWidgetComponent user={user} />
+    <div className="w-screen h-screen border flex lg:flex-row">
+      <Sidebar />
+      <div className="flex flex-col w-full ">
+        <Header />
+        <div className="bg-[#F9F9F9] p-4 mt-4">
+          <div className="w-full flex justify-between items-center  font-semibold">
+            <div className="ml-6 text-xl">Users</div>
+            <div className="flex items-center">
+              <button
+                className={`border-[4px] p-2 shadow-lg flex items-center rounded-md ${isGridView ? 'bg-white border-white ' : 'bg-[#641CC0] border-[#641CC0]'}`}
+                onClick={() => setIsGridView(false)}
+              >
+                <ListViewIcon className={`${isGridView ? 'text-[#641CC0]' : 'text-white'}`} />
+              </button>
+              <button
+                className={`border-[4px] p-2 shadow-lg flex items-center rounded-md ${isGridView ? 'bg-[#641CC0] border-[#641CC0]' : 'bg-white border-white'}`}
+                onClick={() => setIsGridView(true)}
+              >
+                <GridViewIcon className={`${isGridView ? 'text-white' : 'text-[#641CC0]'}`} />
+              </button>
+              <div className="mx-4">
+                <button
+                  className="border-[4px] p-2 border-[#641CC0] bg-[#641CC0] shadow-lg text-white rounded-md text-[14px]"
+                  onClick={() => navigate('/add-user')}
+                >
+                  <span className="md:hidden mx-2">+ Add</span>
+                  <span className="hidden md:inline">+ Add User</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          {isGridView ? <UserGridView users={users}/> : <UserListComponent users={users} />}
+        
+        </div>
+        
+      </div>
     </div>
   );
-}
+};
 
-export default TestPage;
+export default TestPage

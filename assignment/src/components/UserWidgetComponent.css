@@ -4,18 +4,22 @@
   align-items: center;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 16px;
+  padding : 16px ;
   margin: 16px;
   max-width: 300px;
-  background-color: #fff;
+  background-color: #FAFAFA;
+  width: 500px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+ 
 }
 
 .user-photo {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 16px;
+  margin-left: 8px;
 }
 
 .user-details h2 {
