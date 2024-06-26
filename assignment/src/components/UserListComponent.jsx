@@ -1,19 +1,32 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { initialUsers } from "../store";
+import ConfirmationModal from "./ConfirmationModal";
 
-const UserListComponent = ({users}) => {
+const UserListComponent = ({users,deleteUser}) => {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
 
   const handleEdit = (id) => {
     navigate(`/edit/${id}`);
   };
 
   const handleDelete = (id) => {
-    navigate(`/delete/${id}`);
+    setUserToDelete(id);
+    setShowModal(true);
+  };
+  const confirmDelete = () => {
+    deleteUser(userToDelete);
+    setShowModal(false);
+    setUserToDelete(null);
   };
 
+  const cancelDelete = () => {
+    setShowModal(false);
+    setUserToDelete(null);
+  };
   const toggleDropdown = (id) => {
     setShowDropdown(showDropdown === id ? null : id);
   };
@@ -82,6 +95,11 @@ const UserListComponent = ({users}) => {
           </tbody>
         </table>
         </div>
+        <ConfirmationModal
+        isOpen={showModal}
+        onClose={cancelDelete}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 };

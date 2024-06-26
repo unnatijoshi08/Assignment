@@ -5,7 +5,7 @@ import { initialUsers } from "./store";
 import UserGridView from "./components/UserGridView";
 
 import EditUserComponent from "./components/EditUserComponent";
-import DeleteUserComponent from "./components/DeleteUserComponent";
+
 import AddUserComponent from "./components/AddUserComponent";
 
 import { Route, Routes } from "react-router-dom";
@@ -28,6 +28,16 @@ const App = () => {
     alert("The user has been added successfully");
   };
 
+  const updateUser = (updatedUser) => {
+    setUsers(users.map(user => (user.id === updatedUser.id ? updatedUser : user)));
+    alert("The user has been updated successfully");
+  };
+
+  const deleteUser = (id) => {
+    setUsers(users.filter(user => user.id !== id));
+    alert('The user has been deleted successfully');
+  };
+
   return (
     <Routes>
       <Route
@@ -38,14 +48,22 @@ const App = () => {
             users={users}
             setIsGridView={setIsGridView}
             isGridView={isGridView}
+            deleteUser = {deleteUser}
           />
         }
       />
+      
       <Route
         path="/add-user"
         element={<AddUserComponent addUser={addUser} />}
       />
-     
+      <Route
+        path="/edit/:id"
+        element={<EditUserComponent users={users} updateUser={updateUser} />}
+      />
+      
+  
+    
     </Routes>
   );
 };
