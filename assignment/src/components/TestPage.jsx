@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import UserListComponent from "./UserListComponent";
 
 import EditUserComponent from "./EditUserComponent";
-import DeleteUserComponent from "./DeleteUserComponent";
+
 import Sidebar from "./Sidebar";
 import { initialUsers } from "../store";
 import Header from "./Header";
@@ -13,7 +13,7 @@ import UserGridView from "./UserGridView"
 import { useNavigate } from "react-router-dom";
 import AddUserComponent from "./AddUserComponent";
 
-const TestPage = ({ addUser, users, setIsGridView, isGridView }) => {
+const TestPage = ({ addUser, users, setIsGridView, isGridView,deleteUser }) => {
  
   const navigate= useNavigate();
 
@@ -50,7 +50,8 @@ const TestPage = ({ addUser, users, setIsGridView, isGridView }) => {
             </div>
           </div>
           
-          {isGridView ? <UserGridView users={users}/> : <UserListComponent users={users} />}
+        
+          {isGridView ? <UserGridView users={users} deleteUser={deleteUser}/> : <UserListComponent users={users} deleteUser={deleteUser}/>}
         
         </div>
         
