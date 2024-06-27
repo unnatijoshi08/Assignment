@@ -9,6 +9,9 @@ import EditUserComponent from "./components/EditUserComponent";
 import AddUserComponent from "./components/AddUserComponent";
 
 import { Route, Routes } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const App = () => {
   const [users, setUsers] = useState(initialUsers);
@@ -25,47 +28,50 @@ const App = () => {
         lastLogin: new Date().toISOString().split("T")[0],
       },
     ]);
-    alert("The user has been added successfully");
+    toast.success("The user has been added successfully");
   };
 
   const updateUser = (updatedUser) => {
     setUsers(users.map(user => (user.id === updatedUser.id ? updatedUser : user)));
-    alert("The user has been updated successfully");
+    toast.success("The user has been updated successfully");
   };
 
   const deleteUser = (id) => {
     setUsers(users.filter(user => user.id !== id));
-    alert('The user has been deleted successfully');
+    toast.info('The user has been deleted successfully');
   };
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <TestPage
-            addUser={addUser}
-            users={users}
-            setIsGridView={setIsGridView}
-            isGridView={isGridView}
-            deleteUser = {deleteUser}
-          />
-        }
-      />
-      
-      <Route
-        path="/add-user"
-        element={<AddUserComponent addUser={addUser} />}
-      />
-      <Route
-        path="/edit/:id"
-        element={<EditUserComponent users={users} updateUser={updateUser} />}
-      />
-      
-  
-    
-    </Routes>
-  );
+    <div> <ToastContainer />
+     <Routes>
+     
+     <Route
+       path="/"
+       element={
+         <TestPage
+           addUser={addUser}
+           users={users}
+           setIsGridView={setIsGridView}
+           isGridView={isGridView}
+           deleteUser = {deleteUser}
+         />
+       }
+     />
+     
+     <Route
+       path="/add-user"
+       element={<AddUserComponent addUser={addUser} />}
+     />
+     <Route
+       path="/edit/:id"
+       element={<EditUserComponent users={users} updateUser={updateUser} />}
+     />
+     
+ 
+   
+   </Routes>
+</div>
+     );
 };
 
 export default App;
