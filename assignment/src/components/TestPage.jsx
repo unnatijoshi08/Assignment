@@ -12,10 +12,25 @@ import GridViewIcon from "../assets/GridViewIcon";
 import UserGridView from "./UserGridView"
 import { useNavigate } from "react-router-dom";
 import AddUserComponent from "./AddUserComponent";
+import { SearchIcon } from "../assets/SearchIcon";
+import { SortByIcon } from "../assets/SortByIcon";
+import { FilterByIcon } from "../assets/FilterByIcon";
+import classNames from 'classnames';
+
 
 const TestPage = ({ addUser, users, setIsGridView, isGridView,deleteUser }) => {
- 
+
+  const [isInputFocused, setIsInputFocused] = useState(false);
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const navigate= useNavigate();
+  const filteredUsers = users.filter(
+    (user) =>
+      user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="w-screen h-screen border flex lg:flex-row">
@@ -49,10 +64,57 @@ const TestPage = ({ addUser, users, setIsGridView, isGridView,deleteUser }) => {
               </div>
             </div>
           </div>
-          
+          <div className="border shadow-lg m-9 rounded-md">
+        <div className="flex justify-between items-center px-6 py-4">
+          <div className="flex space-x-4">
+            <button className="flex items-center p-2 bg-[#fafafa] border border-[#E0E0E2] text-[#63666b] rounded">
+              <SortByIcon className={"mr-2"} />
+              Sort By
+            </button>
+            <button className="flex items-center p-2 bg-[#fafafa] border border-[#E0E0E2] text-[#63666b] rounded">
+              <FilterByIcon className={"mr-2"} />
+              Filter By
+            </button>
+          </div>
+          <div className="flex items-center mr-5 md:mr-7">
+            <div
+              className={classNames(
+                "flex items-center gap-1 bg-white py-2 pl-2 pr-[4.5px] md:p-2 rounded-lg border border-[#777a81] ml-4",
+                { "border-purple-800": isInputFocused }
+              )}
+            >
+              <button
+                type="button"
+                className="h-6 aspect-square"
+                onClick={() => setIsSearchExpanded(!isSearchExpanded)}
+              >
+                <SearchIcon className="w-5 h-5" />
+              </button>
+              <input
+                type="text"
+                placeholder="Search here"
+                className={classNames(
+                  "bg-transparent outline-none text-black",
+                  { "hidden md:block": !isSearchExpanded },
+                  {
+                    "w-20 md:w-48": !isSearchExpanded,
+                    "w-full": isSearchExpanded,
+                  }
+                )}
+                onBlur={() => {
+                  setIsInputFocused(false);
+                  setIsSearchExpanded(false);
+                }}
+                onFocus={() => setIsInputFocused(true)}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
         
-          {isGridView ? <UserGridView users={users} deleteUser={deleteUser}/> : <UserListComponent users={users} deleteUser={deleteUser}/>}
+          {isGridView ? <UserGridView users={filteredUsers} deleteUser={deleteUser}/> : <UserListComponent users={filteredUsers} deleteUser={deleteUser}/>}
         
+        </div>
         </div>
         
       </div>
@@ -60,4 +122,4 @@ const TestPage = ({ addUser, users, setIsGridView, isGridView,deleteUser }) => {
   );
 };
 
-export default TestPage
+export default TestPage;
