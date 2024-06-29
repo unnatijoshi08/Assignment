@@ -3,7 +3,7 @@ import UserIcon from "../assets/UserIcon";
 import Vector from "../assets/Vector";
 export default function Sidebar() {
   return (
-    <div className="hidden md:block h-screen w-64 bg shadow-xl font-poppins">
+    <div className="hidden md:block h-[1000px] w-64 bg shadow-xl font-poppins">
       <img className="my-4 mx-9" src={MultiImage} alt="" />
       <div className="">
         <div className="text-sm my-10 text-gray-400 mx-9">MAIN MENU</div>
