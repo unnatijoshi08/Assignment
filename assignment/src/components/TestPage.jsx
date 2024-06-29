@@ -17,6 +17,9 @@ import classNames from "classnames";
 import { RightArrowIcon } from "../assets/RightArrowIcon";
 import { LeftArrowIcon } from "../assets/LeftArrowIcon";
 import Pagination from "./Pagination";
+import qs from "qs";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const TestPage = ({
   addUser,
@@ -39,6 +42,22 @@ const TestPage = ({
   const endIndex = startIndex + itemsPerPage;
   const paginatedUsers = users.slice(startIndex, endIndex);
   const [sortCriteria, setSortCriteria] = useState("alphabetical-az");
+  const [filterRole, setFilterRole] = useState("");
+
+  
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = qs.parse(location.search, { ignoreQueryPrefix: true });
+    if (params.role) {
+      setFilterRole(params.role);
+    }
+  }, [location.search]);
+
+  useEffect(() => {
+    const queryParams = qs.stringify({ role: filterRole });
+    navigate(`?${queryParams}`, { replace: true });
+  }, [filterRole, navigate]);
 
   const sortedUsers = [...paginatedUsers].sort((a, b) => {
     switch (sortCriteria) {
@@ -57,9 +76,10 @@ const TestPage = ({
 
   const filteredUsers = sortedUsers.filter(
     (user) =>
-      user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+      ((filterRole === "" || user.role === filterRole) &&
+        (user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchQuery.toLowerCase())))
   );
 
   return (
@@ -127,7 +147,16 @@ const TestPage = ({
                 </button>
                 <button className="flex items-center p-2 bg-[#fafafa] border border-[#E0E0E2] text-[#63666b] rounded">
                   <FilterByIcon className={"mr-2"} />
-                  Filter By
+
+                  <select
+                    className="bg-transparent border-none"
+                    value={filterRole}
+                    onChange={(e) => setFilterRole(e.target.value)}
+                  >
+                    <option value="">All Roles</option>
+                    <option value="User">User</option>
+                    <option value="Admin">Admin</option>
+                  </select>
                 </button>
               </div>
               <div className="flex items-center mr-5 md:mr-7">
