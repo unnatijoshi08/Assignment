@@ -85,9 +85,9 @@ const TestPage = ({
   return (
     <div className="w-screen h-screen border flex lg:flex-row">
       <Sidebar />
-      <div className="flex flex-col w-full h-screen">
+      <div className="flex flex-col w-full h-screen mx-2">
         <Header />
-        <div className="bg-[#F9F9F9] p-4 mt-4">
+        <div className="bg-[#F9F9F9] p-2 mt-0 ">
           <div className="w-full flex justify-between items-center  font-semibold">
             <div className="ml-6 text-xl">Users</div>
             <div className="flex items-center">
@@ -126,8 +126,8 @@ const TestPage = ({
               </div>
             </div>
           </div>
-          <div className="border shadow-lg m-9 rounded-md">
-            <div className="flex justify-between items-center px-6 py-4">
+          <div className="border shadow-lg m-4 rounded-md">
+            <div className="flex justify-between items-center px-2 py-2">
               <div className="flex space-x-4">
                 <button className="flex items-center p-2 bg-[#fafafa] border border-[#E0E0E2] text-[#63666b] rounded">
                   <SortByIcon className={"mr-2"} />
