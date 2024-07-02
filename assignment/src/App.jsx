@@ -4,6 +4,7 @@ import UserWidgetComponent from "./components/UserWidgetComponent";
 import { initialUsers } from "./store";
 import UserGridView from "./components/UserGridView";
 
+
 import EditUserComponent from "./components/EditUserComponent";
 
 import AddUserComponent from "./components/AddUserComponent";
@@ -11,6 +12,7 @@ import AddUserComponent from "./components/AddUserComponent";
 import { Route, Routes } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
+import Dashboard from "./components/Dashboard";
 
 
 const App = () => {
@@ -44,7 +46,7 @@ const App = () => {
   return (
     <div> <ToastContainer />
      <Routes>
-     
+    
      <Route
        path="/"
        element={
@@ -57,7 +59,11 @@ const App = () => {
          />
        }
      />
-     
+
+      <Route
+          path="/dashboard"
+          element={<Dashboard />}
+        />
      <Route
        path="/add-user"
        element={<AddUserComponent addUser={addUser} />}

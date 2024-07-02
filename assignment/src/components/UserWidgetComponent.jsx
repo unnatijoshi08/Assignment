@@ -1,101 +1,103 @@
-import React from "react";
-import "./UserWidgetComponent.css";
-import ConfirmationModal from "./ConfirmationModal";
-import { useState } from "react";
+import React, { useState } from "react";
+import { OptionsIcon } from "../assets/OptionsIcon";
 import { useNavigate } from "react-router-dom";
 
-function UserWidgetComponent({ user }) {
-  const [showMenu, setShowMenu] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+import { toast } from "react-toastify";
+
+import ConfirmationModal from "./ConfirmationModal";
+
+export default function UserWidgetComponent({ user }) {
   const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  const toggleMenu = () => {
-    setShowMenu(!showMenu);
+  const navigateToEditUser = () => {
+    navigate(`/edit-user/${user.id}`);
   };
 
-  const handleEditClick = () => {
-    toggleMenu(); // Close menu after selecting edit
-    navigate(`/edit/${user.id}`); // Pass user id to edit function
-  };
-
-  const handleDeleteClick = () => {
-    toggleMenu(); // Close menu after selecting delete
-     // Pass user id to delete function
-    setUserToDelete(user.id);
+  const handleDeleteUser = () => {
     setShowModal(true);
-  };
-  const handleDelete = (id) => {
-    setUserToDelete(id);
-    setShowModal(true);
-  };
-  const confirmDelete = () => {
-    deleteUser(userToDelete);
+    useUserStore.getState().deleteUser(user.id);
     setShowModal(false);
-    setUserToDelete(null);
-  };
-
-  const cancelDelete = () => {
-    setShowModal(false);
-    setUserToDelete(null);
+    toast.error("User has been deleted successfully!");
+    navigate("/users");
   };
 
   return (
-    <div className="user-widget" >
-      <div className="flex justify-center items-center gap-1.5">
-      <img
-        className="user-photo"
-        src={user.photo}
-        alt={`${user.firstName} ${user.lastName}`}
-      />
-      <div >
-        <p className="text-gray-700 text-base" >
-          {user.firstName} {user.lastName}
-        </p>
-        <p className="mt-1.5 text-gray-600 text-ellipsis">{user.email}</p>
-        <p className="mt-0.5 text-gray-600">
-          
-          {user.status ? "     🟢 Active" : " 🔴 Inactive"}
-        </p>
+    <div className="relative flex w-full max-w-[370px] items-center rounded-lg shadow-sm border border-[#E0E0E2] bg-[#FAFAFA] p-4">
+      {showModal && (
+        <div className="fixed inset-0 z-20 flex items-center justify-center">
+          <ConfirmationModal
+            onConfirm={handleDeleteUser}
+            onCancel={() => setShowModal(false)}
+          />
+        </div>
+      )}
+      <div className="photo-container pr-4">
+        <img
+          src={user.photo}
+          alt={`${user.firstName} ${user.lastName}`}
+          className="h-[75px] min-h-[75px] w-[75px] min-w-[75px] rounded-full"
+        />
       </div>
-      </div>
-      <div className="ml-8">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="19"
-        height="19"
-        fill="rgb(100,28,192)"
-        className="bi bi-three-dots-vertical"
-        viewBox="0 0 16 16"
-        onClick={toggleMenu}
-      >
-        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-      </svg>
-      {showMenu && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-10">
-              <div className="py-1">
-                <button
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
-                  onClick={handleEditClick}
-                >
-                  Edit
-                </button>
-                <button
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
-                  onClick={handleDeleteClick}
-                >
-                  Delete
-                </button>
-              </div>
+      <div className="flex flex-col justify-center text-[#63666B]">
+        <p className="font-poppins text-left text-[18px] font-medium leading-[27px]">
+          {`${user.firstName} ${user.lastName}`}
+        </p>
+        <p
+          className="font-poppins max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap text-left text-[14px] font-normal leading-[21px]"
+          title={user.email}
+        >
+          {user.email}
+        </p>
+        <div className="flex items-center">
+          {user.status === "Active" ? (
+            <div className="flex items-center">
+              🟢
+              <span className="font-poppins ml-1 text-left text-[14px] font-normal leading-[21px]">
+                Active
+              </span>
+            </div>
+          ) : (
+            <div className="flex items-center">
+              🔴
+              <span className="font-poppins ml-1 text-left text-[14px] font-normal leading-[21px]">
+                Inactive
+              </span>
             </div>
           )}
+        </div>
       </div>
-      <ConfirmationModal
-        isOpen={showModal}
-        onClose={cancelDelete}
-        onConfirm={confirmDelete}
-      />
+      <div className="relative mb-auto ml-auto">
+        <button
+          onClick={() => setDropdownOpen(!dropdownOpen)}
+          className="focus:outline-none"
+        >
+          <OptionsIcon />
+        </button>
+        {dropdownOpen && (
+          <div className="absolute right-0 z-10 mt-2 w-40 rounded-md border border-gray-200 bg-white py-2 shadow-lg">
+            <button
+              onClick={() => {
+                navigateToEditUser();
+                setDropdownOpen(false);
+              }}
+              className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => {
+                setShowModal(true);
+                setDropdownOpen(false);
+              }}
+              className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+            >
+              Delete
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
-
-export default UserWidgetComponent;
