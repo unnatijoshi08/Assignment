@@ -54,7 +54,7 @@ const EditUserComponent = ({ users, updateUser }) => {
     };
     delete updatedUser.confirmPassword;
     updateUser(updatedUser);
-    navigate('/');
+    navigate('/test-page');
   };
 
   if (!user) {
@@ -180,7 +180,7 @@ const EditUserComponent = ({ users, updateUser }) => {
         <button
           type="button"
           className="p-6 bg-gray-500 text-white text-pretty py-2 rounded-lg ml-4"
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/tets-page')}
         >
           Cancel
         </button>

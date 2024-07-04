@@ -23,7 +23,8 @@ const handleChange=(e)=>{
 const handleSubmit=(e)=>{
     e.preventDefault();//To avoid page from refreshing
     addUser(newUser);
-    navigate("/")
+    toast.success("The user has been added successfully");
+    navigate("/test-page")
 }
 
     return (
